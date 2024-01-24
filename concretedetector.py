@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 
 # Load the pre-trained model
-model_path = r'C:\Users\ForTh\Downloads\School & Work\NTU\Y3S2\FYP\Crack Detection\code\project\saved_model\resnet50v2_model'
+model_path = r'C:\Users\ForTh\Downloads\Comp Projects\Concrete Crack Detection\code\saved_model\resnet50v2_model2'
 model = tf.keras.models.load_model(model_path)
 
 

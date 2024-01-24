@@ -118,38 +118,30 @@ def build_model(base_model):
     return Model(inputs, outputs)
 
 # Dict of pre-trained models
-models = {
-    "ResNet50V2": ResNet50V2,
-}
+model = ResNet50V2
 
-# Compile Models
-compiled_models = {}
-for model_name, model_architecture in models.items():
-    base = model_architecture(include_top=False, weights='imagenet')
-    compiled_models[model_name] = build_model(base)
-    compiled_models[model_name].compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+base = model(include_top=False, weights='imagenet')
+model = build_model(base)
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     
 # Train and Validate
-history_data = {}
-for model_name, model in compiled_models.items():
-    print(f"Training {model_name}...")
-    history = model.fit(train_images, validation_data=val_images, epochs=1,
-                        callbacks=[
-                            tf.keras.callbacks.EarlyStopping(
-                                monitor='val_loss',
-                                min_delta=0.0002,
-                                patience=3,
-                                mode='min',
-                                verbose=1,
-                                baseline=None,
-                                restore_best_weights=True
-                                )
-                            ]
-                        )
-    history_data[model_name] = history
+print(f"Training {model}...")
+history = model.fit(train_images, validation_data=val_images, epochs=1,
+                    callbacks=[
+                        tf.keras.callbacks.EarlyStopping(
+                            monitor='val_loss',
+                            min_delta=0.0002,
+                            patience=3,
+                            mode='min',
+                            verbose=1,
+                            baseline=None,
+                            restore_best_weights=True
+                            )
+                        ]
+                    )
 
 # Saving the ResNet50v2 Model
-#model_save_path = r"C:\Users\ForTh\Downloads\School & Work\NTU\Y3S2\FYP\Crack Detection\code\project\saved_model\resnet50v2_model"
-#compiled_models['ResNet50V2'].save(model_save_path)
+model_save_path = r"C:\Users\ForTh\Downloads\Comp Projects\Concrete Crack Detection\code\saved_model\resnet50v2_model2"
+model.save(model_save_path)
 
 print("Process completed!")
