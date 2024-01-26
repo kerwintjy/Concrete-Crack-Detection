@@ -5,31 +5,23 @@ Spyder Editor
 This is a temporary script file.
 """
 
-import glob
-import os
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import plotly.express as px
+import warnings
 from pathlib import Path
 
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, classification_report
+import pandas as pd
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import ResNet50, ResNet50V2, ResNet152V2, VGG16, VGG19
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.applications import ResNet50V2
 from tensorflow.keras.layers import Input, Flatten, Dense, Dropout
 from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam
 
-import warnings
 warnings.simplefilter("ignore")
 
 # 1. Data Preparation
 # Turn the directory paths into Path object
 positive_dir = Path(r'C:\Users\ForTh\Downloads\School & Work\NTU\Y3S2\FYP\Crack Detection\test\Positive')
 negative_dir = Path(r'C:\Users\ForTh\Downloads\School & Work\NTU\Y3S2\FYP\Crack Detection\test\Negative')
+
 
 def generate_df(image_dir, label):
     """
@@ -50,20 +42,20 @@ data.head()
 
 # Split Training and Test sets
 train_df, test_df = train_test_split(
-    data.sample(6000, random_state=0), # Keep only 6000 samples to save computation time.
+    data.sample(6000, random_state=0),  # Keep only 6000 samples to save computation time.
     train_size=0.7,
     shuffle=True,
     random_state=42)
 
 # Image generator for the training set
 train_generator = tf.keras.preprocessing.image.ImageDataGenerator(
-    rescale=1/255,
+    rescale=1 / 255,
     validation_split=0.2,
 )
 
 # Image generator for the test set
 test_generator = tf.keras.preprocessing.image.ImageDataGenerator(
-    rescale=1/255
+    rescale=1 / 255
 )
 
 # Generate training images
@@ -106,6 +98,7 @@ test_images = test_generator.flow_from_dataframe(
     shuffle=False
 )
 
+
 # Build Model
 def build_model(base_model):
     base_model.trainable = False
@@ -117,13 +110,14 @@ def build_model(base_model):
     outputs = Dense(1, activation='sigmoid')(x)
     return Model(inputs, outputs)
 
+
 # Dict of pre-trained models
 model = ResNet50V2
 
 base = model(include_top=False, weights='imagenet')
 model = build_model(base)
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-    
+
 # Train and Validate
 print(f"Training {model}...")
 history = model.fit(train_images, validation_data=val_images, epochs=1,
@@ -136,8 +130,8 @@ history = model.fit(train_images, validation_data=val_images, epochs=1,
                             verbose=1,
                             baseline=None,
                             restore_best_weights=True
-                            )
-                        ]
+                        )
+                    ]
                     )
 
 # Saving the ResNet50v2 Model
