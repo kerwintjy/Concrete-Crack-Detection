@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
-
 import warnings
 from pathlib import Path
 
@@ -19,8 +12,8 @@ warnings.simplefilter("ignore")
 
 # 1. Data Preparation
 # Turn the directory paths into Path object
-positive_dir = Path(r'C:\Users\ForTh\Downloads\School & Work\NTU\Y3S2\FYP\Crack Detection\test\Positive')
-negative_dir = Path(r'C:\Users\ForTh\Downloads\School & Work\NTU\Y3S2\FYP\Crack Detection\test\Negative')
+positive_dir = Path('../datasets/Positive')
+negative_dir = Path('../datasets/Negative')
 
 
 def generate_df(image_dir, label):
@@ -111,7 +104,7 @@ def build_model(base_model):
     return Model(inputs, outputs)
 
 
-# Dict of pre-trained models
+# Using ResNet50V2 pre-trained model
 model = ResNet50V2
 
 base = model(include_top=False, weights='imagenet')
@@ -119,7 +112,7 @@ model = build_model(base)
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 # Train and Validate
-print(f"Training {model}...")
+print("Training ResNet50V2...")
 history = model.fit(train_images, validation_data=val_images, epochs=1,
                     callbacks=[
                         tf.keras.callbacks.EarlyStopping(
@@ -135,7 +128,7 @@ history = model.fit(train_images, validation_data=val_images, epochs=1,
                     )
 
 # Saving the ResNet50v2 Model
-model_save_path = r"C:\Users\ForTh\Downloads\Comp Projects\Concrete Crack Detection\code\saved_model\resnet50v2_model2"
+model_save_path = "saved_model"
 model.save(model_save_path)
 
 print("Process completed!")
