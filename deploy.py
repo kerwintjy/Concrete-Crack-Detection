@@ -1,13 +1,12 @@
 import gradio as gr
 import tensorflow as tf
-import cv2
 import numpy as np
 
 model = tf.keras.models.load_model('saved_model')
 
 
 def detect_crack(img):
-    img = cv2.resize(img, (227, 227))  # Image size used for training model
+    img = tf.image.resize(img, (227, 227))  # Image size used for training model
     img = img / 255.0  # Normalizing as per code
     img = np.expand_dims(img, axis=0)  # Expanding dimensions to match the model input shape
 
