@@ -20,7 +20,7 @@ def detect_crack(img):
 
 description = ("Concrete crack detection demo. This model is built on the ResNet50v2 architecture. "
                "The model predicts and classifies if an image contains a crack in the concrete."
-               "This application is authored by Kerwin Tan")
+               "Author: Kerwin Tan")
 
 Title = "Concrete Crack Detector"
 
